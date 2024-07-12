@@ -1,27 +1,15 @@
 import { Router } from 'express';
-import {
-    getAllUsers,
-    userLogin,
-    userLogout,
-    userSignup,
-    userSignupAsGuest,
-    verifyUser,
-  } from "../controllers/user-controller.js";
-import {
-    loginValidator,
-    signupValidator,
-    validate,
-  } from "../utils/validators.js";
-import { verifyToken } from "../utils/token-manager.js";
+import { getAllUsers, userSignup, userSignupAsGuest, userLogin, userLogout } from "../controllers/user.controllers.js";
+import { verifyJWT } from '../middlewares/auth.middleware.js';
+
 
 const router = Router();
 
 router.route('/').get(getAllUsers);
-router.route('/signup').post(validate(signupValidator),userSignup);
-router.route('/login').post(validate(loginValidator),userLogin);
+router.route('/signup').post(userSignup);
+router.route('/login').post(userLogin);
 router.route('/guest').post(userSignupAsGuest);
-router.route('/auth-status').get(verifyToken,verifyUser);
-router.route('/logout').get(verifyToken,userLogout);
+router.route('/logout').get(verifyJWT,userLogout);
 
 export default router;
 
